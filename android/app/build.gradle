@@ -1,6 +1,7 @@
 apply plugin: "com.android.application"
 apply plugin: "org.jetbrains.kotlin.android"
 apply plugin: "com.facebook.react"
+apply from: file("../../node_modules/react-native-vector-icons/fonts.gradle")
 
 /**
  * This is the configuration block to customize your React Native Android app.
@@ -82,6 +83,9 @@ android {
         versionCode 1
         versionName "1.0"
     }
+     packagingOptions {
+     pickFirst '**/libc++_shared.so' // ⬅️ This (if missing)
+  }
     signingConfigs {
         debug {
             storeFile file('debug.keystore')
@@ -108,6 +112,8 @@ dependencies {
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")
     implementation("com.facebook.react:flipper-integration")
+    implementation project(':watermelondb-jsi') // ⬅️ This!
+    implementation project(':react-native-vector-icons') // ⬅️ This!
 
     if (hermesEnabled.toBoolean()) {
         implementation("com.facebook.react:hermes-android")

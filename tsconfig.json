@@ -1,3 +1,13 @@
 {
-  "extends": "@react-native/typescript-config/tsconfig.json"
+  "extends": "@react-native/typescript-config/tsconfig.json",
+  "compilerOptions": {
+    "skipLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "app/*": ["./app/*"],
+      "@nozbe/watermelondb/*":["..//../src/*"],
+    }
+  },
+  "include": ["index.js", "App.tsx", "app", "types", "plugins", "app.config.ts", "node_modules/@shopify/flash-list"],
+  "exclude": ["node_modules"]
 }

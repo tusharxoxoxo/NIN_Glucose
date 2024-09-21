@@ -11,6 +11,8 @@ import com.facebook.react.defaults.DefaultReactHost.getDefaultReactHost
 import com.facebook.react.defaults.DefaultReactNativeHost
 import com.facebook.react.flipper.ReactNativeFlipper
 import com.facebook.soloader.SoLoader
+import com.nozbe.watermelondb.jsi.WatermelonDBJSIPackage // ⬅️ This!
+import com.facebook.react.bridge.JSIModulePackage // ⬅️ This!
 
 class MainApplication : Application(), ReactApplication {
 
@@ -23,6 +25,10 @@ class MainApplication : Application(), ReactApplication {
             }
 
         override fun getJSMainModuleName(): String = "index"
+
+        override fun getJSIModulePackage(): JSIModulePackage {
+          return WatermelonDBJSIPackage() // ⬅️ This!
+      }
 
         override fun getUseDeveloperSupport(): Boolean = BuildConfig.DEBUG
 

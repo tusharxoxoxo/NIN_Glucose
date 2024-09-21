@@ -8,3 +8,6 @@
 #   http://developer.android.com/guide/developing/tools/proguard.html
 
 # Add any project specific keep options here:
+
+-keep class com.nozbe.watermelondb.** { *; }
+-keep class com.shopify.reactnative.skia.** { *; }
