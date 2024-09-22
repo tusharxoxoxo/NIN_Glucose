@@ -13,9 +13,7 @@ const VisitCard = ({item, openBottomSheet}) => {
   };
 
   return (
-    <Card
-      style={[styles.card, {backgroundColor: colors.surface}]}
-      elevation={4}>
+    <Card style={[styles.card, {backgroundColor: colors.surface}]}>
       <Card.Title
         title={`Visit Date: ${formatDate(item.visitDate)}`}
         subtitle={`Visit ID: ${item.id}`}
@@ -65,8 +63,8 @@ const styles = StyleSheet.create({
   card: {
     marginBottom: 16,
     borderRadius: 12,
-    overflow: 'hidden',
-    elevation: 2,
+    marginVertical: 4,
+    marginHorizontal: 4,
   },
   visitTitle: {
     fontWeight: 'bold',

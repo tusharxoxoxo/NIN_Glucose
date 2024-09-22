@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 4,
   },
   card: {
-    borderRadius: 8,
+    borderRadius: 12,
     elevation: 2,
   },
   detailRow: {

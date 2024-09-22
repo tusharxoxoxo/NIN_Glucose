@@ -44,23 +44,18 @@ const VisitList = ({visits, patient}) => {
     }
   };
   return (
-    <>
+    <View style={styles.container}>
       <View style={styles.visitsHeader}>
-        {/* Container for Icon and Headline */}
         <View style={styles.headerLeft}>
           <Icon name="calendar" size={28} color={theme.colors.primary} />
           <Headline style={styles.sectionTitle}>Visits</Headline>
         </View>
-
-        {/* Plus Icon Button on the Right */}
         <TouchableOpacity
           onPress={handlePressAddVisit}
           style={styles.addButton}>
           <Icon name="plus-circle" size={36} color={theme.colors.primary} />
         </TouchableOpacity>
       </View>
-
-      {/* Visit List */}
       <FlatList
         data={visits}
         keyExtractor={item => item.id}
@@ -68,8 +63,6 @@ const VisitList = ({visits, patient}) => {
           <VisitCard item={item} openBottomSheet={openBottomSheet} />
         )}
       />
-
-      {/* Bottom Sheet for Clinical Info or Data Collection */}
       <VisitBottomSheet
         sheetRef={sheetRef}
         snapPoints={snapPoints}
@@ -77,7 +70,7 @@ const VisitList = ({visits, patient}) => {
         selectedVisit={selectedVisit}
         handleSubmit={handleSubmit}
       />
-    </>
+    </View>
   );
 };
 
@@ -91,6 +84,9 @@ const enhance = withObservables(['patientID'], ({patientID}) => ({
 export default enhance(VisitList);
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   visitsHeader: {
     flexDirection: 'row',
     alignItems: 'center',
