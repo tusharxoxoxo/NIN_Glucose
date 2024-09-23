@@ -4,7 +4,6 @@ import PatientCard from './patientCard'; // Adjust the import path as necessary
 import {FlashList} from '@shopify/flash-list';
 
 const PatientList = ({patient}) => {
-  console.log('patient', patient);
   return (
     <FlashList
       data={patient}

@@ -48,6 +48,22 @@ const schema = appSchema({
         {name: 'hereditaryHistory', type: 'string'},
       ],
     }),
+    tableSchema({
+      name: 'batches',
+      columns: [
+        {name: 'visit_id', type: 'string', isIndexed: true},
+        {name: 'sensorType', type: 'string'},
+      ],
+    }),
+    tableSchema({
+      name: 'BIA',
+      columns: [
+        {name: 'batch_id', type: 'string', isIndexed: true},
+        {name: 'phaseAngle', type: 'number'},
+        {name: 'bioimpedance', type: 'number'},
+        {name: 'timestamp', type: 'number'},
+      ],
+    }),
   ],
 });
 

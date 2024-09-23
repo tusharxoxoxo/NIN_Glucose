@@ -15,9 +15,7 @@ const PatientDetailsScreen = ({patient, visits}) => {
     <PaperProvider theme={Theme}>
       <View style={styles.container}>
         <PatientDetailsCard patient={patient[0]._raw} />
-        {/* Divider */}
         <Divider style={styles.divider} bold={true} />
-        {/* Visits Header */}
         <VisitList patientID={patient[0]._raw.id} />
       </View>
     </PaperProvider>

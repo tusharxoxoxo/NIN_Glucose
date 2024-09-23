@@ -1,5 +1,5 @@
 import {Model} from '@nozbe/watermelondb';
-import {field, action, writer} from '@nozbe/watermelondb/decorators';
+import {field, action, writer, children} from '@nozbe/watermelondb/decorators';
 import {relation} from '@nozbe/watermelondb/decorators';
 
 export default class Visit extends Model {
@@ -8,6 +8,7 @@ export default class Visit extends Model {
   static associations = {
     patients: {type: 'belongs_to', key: 'patient_id'},
     clinical: {type: 'belongs_to', key: 'visit_id'},
+    batches: {type: 'has_many', foreignKey: 'visit_id'},
   };
 
   @field('patient_id') patient_id;
@@ -17,6 +18,7 @@ export default class Visit extends Model {
   @field('isDataCollected') isDataCollected;
   @relation('patient', 'patient_id') patient;
   @relation('clinics', 'visit_id') clinic;
+  @children('batches') batches;
 
   @writer async addClinical(clinicalInfo) {
     return await this.collections.get('clinics').create(clinic => {

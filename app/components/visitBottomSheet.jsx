@@ -1,9 +1,13 @@
-import React from 'react';
-import BottomSheet from '@gorhom/bottom-sheet';
-import {View, ScrollView, StyleSheet} from 'react-native';
+import {Dimensions} from 'react-native'; // Import Dimensions to calculate screen height
 import {Headline} from 'react-native-paper';
-import MyForm from './clinicForm'; // Import your form component
-import ClinicalDetails from '../components/clinicalDetails';
+import {ScrollView, StyleSheet, View} from 'react-native';
+import BottomSheet from '@gorhom/bottom-sheet';
+import ClinicalDetails from './clinicalDetails';
+import MyForm from './clinicForm';
+import {useMemo} from 'react';
+
+// Get the screen height dynamically
+const {height: screenHeight} = Dimensions.get('window');
 
 const VisitBottomSheet = ({
   sheetRef,
@@ -12,6 +16,12 @@ const VisitBottomSheet = ({
   selectedVisit,
   onFormSubmit,
 }) => {
+  // Dynamic snap points based on screen height
+  const dynamicSnapPoints = useMemo(
+    () => [screenHeight * 0.5, screenHeight * 0.8, screenHeight], // Add full screen height as one of the snap points
+    [screenHeight],
+  );
+
   const handleFormSubmit = ({selectedVisit, formValues}) => {
     console.log('Form submitted handle submit:', formValues);
     console.log('Selected Visit: handle submit', selectedVisit);
@@ -27,7 +37,7 @@ const VisitBottomSheet = ({
       <BottomSheet
         ref={sheetRef}
         index={-1}
-        snapPoints={snapPoints}
+        snapPoints={dynamicSnapPoints} // Use dynamic snap points
         enablePanDownToClose={true}>
         <View style={styles.bottomSheetContent}>
           <Headline style={styles.sheetTitle}>No Visit Selected</Headline>
@@ -39,8 +49,8 @@ const VisitBottomSheet = ({
   return (
     <BottomSheet
       ref={sheetRef}
-      index={0} // Ensure the BottomSheet is open
-      snapPoints={snapPoints}
+      index={0}
+      snapPoints={dynamicSnapPoints} // Use dynamic snap points
       enablePanDownToClose={true}>
       <View style={styles.bottomSheetContent}>
         <Headline style={styles.sheetTitle}>
@@ -50,7 +60,9 @@ const VisitBottomSheet = ({
         </Headline>
 
         <View style={{flex: 1}}>
-          <ScrollView keyboardShouldPersistTaps="handled">
+          <ScrollView
+            contentContainerStyle={{flexGrow: 1}} // Ensure scrolling content grows within available space
+            keyboardShouldPersistTaps="handled">
             {sheetType === 'view' ? (
               <ClinicalDetails visitID={selectedVisit._raw.id} />
             ) : (
@@ -70,7 +82,7 @@ const styles = StyleSheet.create({
   bottomSheetContent: {
     padding: 16,
     backgroundColor: '#fff',
-    flex: 1,
+    flex: 1, // Make the content container take the full available height
   },
   sheetTitle: {
     fontSize: 18,

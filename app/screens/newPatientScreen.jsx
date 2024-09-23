@@ -52,7 +52,6 @@ const NewPatientScreen = () => {
   const [open, setOpen] = useState(false);
 
   const handleSubmit = async values => {
-    console.log('values', values);
     await database.write(async () => {
       const patient = await database
         .get('patients')

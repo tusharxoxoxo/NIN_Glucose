@@ -5,7 +5,6 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {formatDate} from '../utils/dateformater';
 
 const PatientDetailsCard = ({patient}) => {
-  console.log('patientPatientDetailsCard:', patient);
   const {colors, fonts} = useTheme(); // Getting colors and fonts from the theme
 
   // Memoizing the component to avoid unnecessary renders

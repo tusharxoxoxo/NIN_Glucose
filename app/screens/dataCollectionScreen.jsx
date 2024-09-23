@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import {View, StyleSheet, SafeAreaView, Alert} from 'react-native';
 import {Card, Text, Button} from 'react-native-paper';
 import GraphScreen from '../components/graph';
@@ -7,7 +7,6 @@ import {Theme} from '../theme/theme';
 import MqttClient, {
   ConnectionOptions,
   ClientEvent,
-  MQTTEventHandler,
 } from '@ko-developerhong/react-native-mqtt';
 import {
   addTempurature,
@@ -16,18 +15,7 @@ import {
 } from '../redux/features/sensorSlice';
 import {addBio} from '../redux/features/graphSlice';
 
-interface DataWithTopic {
-  topic: string;
-  message: string;
-}
-
-interface Data {
-  sensor: string;
-  batch: string;
-  data: JSON[];
-}
-
-const options: ConnectionOptions = {
+const options = {
   clientId: 'myClientId',
   cleanSession: true,
   keepAlive: 60,
@@ -37,21 +25,23 @@ const options: ConnectionOptions = {
   protocol: 'mqtt',
 };
 
-const DataCollectionScreen: React.FC = () => {
-  let intervalIdTemp: any = null;
-  let intervalIdGsr: any = null;
-  let intervalIdGlu: any = null;
+const DataCollectionScreen = ({route}) => {
+  const visitId = route.params.visitId;
+  console.log('VisitId:', visitId);
+  let intervalIdTemp = null;
+  let intervalIdGsr = null;
+  let intervalIdGlu = null;
 
   const dispatch = useAppDispatch();
   const temperature = useAppSelector(state => state.sensor.temperature);
   const glucose = useAppSelector(state => state.sensor.glucose);
   const gsr = useAppSelector(state => state.sensor.gsr);
 
-  const stringToJson = (message: any): Data => {
+  const stringToJson = message => {
     return JSON.parse(message.toString());
   };
 
-  const handleAction = (action: DataWithTopic) => {
+  const handleAction = action => {
     switch (action.topic) {
       case 'TEM':
         const temp = stringToJson(action.message);
@@ -68,6 +58,8 @@ const DataCollectionScreen: React.FC = () => {
       case 'BIO':
         const bio = stringToJson(action.message);
         dispatch(addBio(bio.data));
+        console.log('Bio:', bio);
+        break;
       case 'ECG':
         const ecg = stringToJson(action.message);
         break;
@@ -77,7 +69,7 @@ const DataCollectionScreen: React.FC = () => {
     }
   };
 
-  const subscribeTopic = (topics: string[]): void => {
+  const subscribeTopic = topics => {
     topics.forEach(topic => {
       MqttClient.subscribe(topic);
     });
@@ -86,28 +78,19 @@ const DataCollectionScreen: React.FC = () => {
   const clientInt = async () => {
     console.log('Connnecting...');
     try {
-      await MqttClient.connect('mqtt://192.168.167.226', {});
-      MqttClient.on(ClientEvent.Connect, (reconnect: any) => {
+      await MqttClient.connect('mqtt://192.168.191.36', {});
+      MqttClient.on(ClientEvent.Connect, reconnect => {
         console.log('Connected');
       });
-      MqttClient.on(ClientEvent.Error, (error: any) => {
+      MqttClient.on(ClientEvent.Error, error => {
         console.log('error : ', error);
       });
-      MqttClient.on(ClientEvent.Disconnect, (cause: any) => {
+      MqttClient.on(ClientEvent.Disconnect, cause => {
         console.log('Disconnect cause : ', cause);
       });
-      MqttClient.on(ClientEvent.Message, (topic: any, message: any) => {
+      MqttClient.on(ClientEvent.Message, (topic, message) => {
         const dataWithTopic = {topic: topic, message: message};
         handleAction(dataWithTopic);
-
-        // if (topic.toString() === 'BioImpedance') {
-        //   const messageString = message.toString('utf-8').trim();
-        //   console.log('Message:', messageString);
-        //   const Data = JSON.parse(messageString);
-        //   console.log('Message:', Data.data);
-        //   dispatch(setgraphdata(Data.data));
-        //   addSensor(messageString);
-        // }
       });
       subscribeTopic(['BIO', 'TEM', 'GSR', 'GLU']);
     } catch (err) {
@@ -115,7 +98,7 @@ const DataCollectionScreen: React.FC = () => {
     }
   };
 
-  const publishMessageToTopic = (topic: string, message: any) => {
+  const publishMessageToTopic = (topic, message) => {
     MqttClient.publish(topic, message);
   };
 
@@ -263,7 +246,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginVertical: 16,
-    marginBottom: 24, // Added margin to ensure space between buttons and other content
+    marginBottom: 24,
   },
   button: {
     flex: 1,
