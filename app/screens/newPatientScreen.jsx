@@ -14,6 +14,8 @@ import DatePicker from 'react-native-date-picker'; // Import the date picker
 import HeaderWithLogo from '../components/headerlogo';
 import {database} from '../DB/database';
 import {Theme} from '../theme/theme';
+import {useTheme} from 'react-native-paper';
+
 import {useNavigation} from '@react-navigation/native';
 
 // Enum for Gender selection
@@ -50,6 +52,7 @@ const validationSchema = Yup.object().shape({
 const NewPatientScreen = () => {
   const navigation = useNavigation();
   const [open, setOpen] = useState(false);
+  const theme = useTheme();
 
   const handleSubmit = async values => {
     await database.write(async () => {
@@ -100,6 +103,7 @@ const NewPatientScreen = () => {
                   onChangeText={handleChange('Name')}
                   onBlur={handleBlur('Name')}
                   value={values.Name}
+                  outlineColor={theme.colors.primary}
                 />
                 {touched.Name && errors.Name && (
                   <Text style={styles.errorText}>{errors.Name}</Text>
@@ -112,6 +116,7 @@ const NewPatientScreen = () => {
                   onChangeText={handleChange('ContactInformation')}
                   onBlur={handleBlur('ContactInformation')}
                   value={values.ContactInformation}
+                  outlineColor={theme.colors.primary}
                 />
                 {touched.ContactInformation && errors.ContactInformation && (
                   <Text style={styles.errorText}>
@@ -127,6 +132,7 @@ const NewPatientScreen = () => {
                   onChangeText={handleChange('Age')}
                   onBlur={handleBlur('Age')}
                   value={values.Age?.toString() ?? ''}
+                  outlineColor={theme.colors.primary}
                 />
                 {touched.Age && errors.Age && (
                   <Text style={styles.errorText}>{errors.Age}</Text>
@@ -140,6 +146,7 @@ const NewPatientScreen = () => {
                   onChangeText={handleChange('Height')}
                   onBlur={handleBlur('Height')}
                   value={values.Height?.toString() ?? ''}
+                  outlineColor={theme.colors.primary}
                 />
                 {touched.Height && errors.Height && (
                   <Text style={styles.errorText}>{errors.Height}</Text>
@@ -153,6 +160,7 @@ const NewPatientScreen = () => {
                   onChangeText={handleChange('Weight')}
                   onBlur={handleBlur('Weight')}
                   value={values.Weight?.toString() ?? ''}
+                  outlineColor={theme.colors.primary}
                 />
                 {touched.Weight && errors.Weight && (
                   <Text style={styles.errorText}>{errors.Weight}</Text>
@@ -160,6 +168,7 @@ const NewPatientScreen = () => {
 
                 {/* Date of Birth Picker */}
                 <Button
+                  outlineColor={theme.colors.primary}
                   mode="outlined"
                   onPress={() => setOpen(true)}
                   style={styles.input}>
@@ -184,6 +193,7 @@ const NewPatientScreen = () => {
                   onCancel={() => {
                     setOpen(false);
                   }}
+                  outlineColor={theme.colors.primary}
                 />
 
                 <Text>Gender</Text>
