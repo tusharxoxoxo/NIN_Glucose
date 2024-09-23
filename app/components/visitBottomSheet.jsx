@@ -81,8 +81,12 @@ const VisitBottomSheet = ({
 const styles = StyleSheet.create({
   bottomSheetContent: {
     padding: 16,
-    backgroundColor: '#fff',
+    backgroundColor: '#f5f5f5',
     flex: 1, // Make the content container take the full available height
+    borderTopStartRadius: 16,
+    borderTopEndRadius: 16,
+    marginLeft: 8,
+    marginRight: 8,
   },
   sheetTitle: {
     fontSize: 18,
