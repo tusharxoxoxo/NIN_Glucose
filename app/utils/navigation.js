@@ -23,7 +23,6 @@ export function navigateWithRetry(name, params, retries = 3) {
   if (navigationRef.isReady()) {
     navigationRef.navigate(name, params);
   } else {
-    console.log('navigationRef is not ready');
     let tries = 1;
     const interval = setInterval(() => {
       if (navigationRef.isReady()) {
@@ -33,7 +32,6 @@ export function navigateWithRetry(name, params, retries = 3) {
         tries++;
         if (tries > retries) {
           clearInterval(interval);
-          console.log('navigationRef is not ready after 3 tries');
         }
       }
     }, 100);

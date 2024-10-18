@@ -2,10 +2,9 @@ import React, {useMemo} from 'react';
 import {View, StyleSheet} from 'react-native';
 import {Card, Avatar, useTheme, Text} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {formatDate} from '../utils/dateformater';
+import {formatDateBirth} from '../utils/dateformater';
 
 const PatientDetailsCard = ({patient}) => {
-  console.log('patientPatientDetailsCard:', patient);
   const {colors, fonts} = useTheme(); // Getting colors and fonts from the theme
 
   // Memoizing the component to avoid unnecessary renders
@@ -34,7 +33,7 @@ const PatientDetailsCard = ({patient}) => {
               Date of Birth:
             </Text>
             <Text style={[styles.value, {color: colors.onSurface}]}>
-              {formatDate(patient.dateOfBirth)}
+              {formatDateBirth(patient.dateofBirth)}
             </Text>
           </View>
 

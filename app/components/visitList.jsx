@@ -18,11 +18,10 @@ const VisitList = ({visits, patient}) => {
   const [selectedVisit, setSelectedVisit] = useState(null);
   const [sheetType, setSheetType] = useState('');
 
-  const snapPoints = useMemo(() => ['50%', '80%'], []);
+  const snapPoints = useMemo(() => ['80%', '50%'], []);
 
   // Function to open the bottom sheet
   const openBottomSheet = (visit, type) => {
-    console.log('Opening Bottom Sheet...', visit);
     setSelectedVisit(visit);
     setSheetType(type); // Set the sheetType correctly
     sheetRef.current.snapToIndex(1); // open to 80%
@@ -30,7 +29,6 @@ const VisitList = ({visits, patient}) => {
 
   // Function to handle the form submission
   const handleSubmit = () => {
-    console.log('Submitting...');
     sheetRef.current.close();
     setClinicalInfo('');
     setDataCollectionInfo('');
@@ -44,33 +42,35 @@ const VisitList = ({visits, patient}) => {
     }
   };
   return (
-    <View style={styles.container}>
-      <View style={styles.visitsHeader}>
-        <View style={styles.headerLeft}>
-          <Icon name="calendar" size={28} color={theme.colors.primary} />
-          <Headline style={styles.sectionTitle}>Visits</Headline>
+    <>
+      <View style={styles.container}>
+        <View style={styles.visitsHeader}>
+          <View style={styles.headerLeft}>
+            <Icon name="calendar" size={28} color={theme.colors.primary} />
+            <Headline style={styles.sectionTitle}>Visits</Headline>
+          </View>
+          <TouchableOpacity
+            onPress={handlePressAddVisit}
+            style={styles.addButton}>
+            <Icon name="plus-circle" size={36} color={theme.colors.primary} />
+          </TouchableOpacity>
         </View>
-        <TouchableOpacity
-          onPress={handlePressAddVisit}
-          style={styles.addButton}>
-          <Icon name="plus-circle" size={36} color={theme.colors.primary} />
-        </TouchableOpacity>
+        <FlatList
+          data={visits}
+          keyExtractor={item => item.id}
+          renderItem={({item}) => (
+            <VisitCard item={item} openBottomSheet={openBottomSheet} />
+          )}
+        />
+        <VisitBottomSheet
+          sheetRef={sheetRef}
+          snapPoints={snapPoints}
+          sheetType={sheetType}
+          selectedVisit={selectedVisit}
+          handleSubmit={handleSubmit}
+        />
       </View>
-      <FlatList
-        data={visits}
-        keyExtractor={item => item.id}
-        renderItem={({item}) => (
-          <VisitCard item={item} openBottomSheet={openBottomSheet} />
-        )}
-      />
-      <VisitBottomSheet
-        sheetRef={sheetRef}
-        snapPoints={snapPoints}
-        sheetType={sheetType}
-        selectedVisit={selectedVisit}
-        handleSubmit={handleSubmit}
-      />
-    </View>
+    </>
   );
 };
 

@@ -29,12 +29,11 @@ const MyForm = ({selectedVisit, onFormSubmit}) => {
   );
 
   const handleSubmitForm = formValues => {
-    console.log('Form submitted:', formValues);
     onFormSubmit({selectedVisit, formValues});
   };
 
   return (
-    <ScrollView style={{backgroundColor: theme.colors.background}}>
+    <ScrollView style={{backgroundColor: theme.colors.surface}}>
       <View style={styles.container}>
         <Formik
           initialValues={{

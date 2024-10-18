@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View, Image} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createMaterialBottomTabNavigator} from 'react-native-paper/react-navigation';
@@ -115,8 +115,11 @@ const AppNavigator = () => {
   if (!refresh) {
     return (
       <View style={styles.container}>
-        <Text>Refreshing Token</Text>
-        <Text>Replace with Splash Screen</Text>
+        <Image
+          source={require('../asset/ihub-logo.png')} // Adjust the path as per your project structure
+          style={styles.logo}
+          resizeMode="contain"
+        />
       </View>
     );
   }
