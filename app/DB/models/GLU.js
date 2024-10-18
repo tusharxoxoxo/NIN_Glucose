@@ -1,8 +1,8 @@
 import {Model} from '@nozbe/watermelondb';
 import {field, relation} from '@nozbe/watermelondb/decorators';
 
-export default class BIA extends Model {
-  static table = 'BIA';
+export default class GLU extends Model {
+  static table = 'GLU';
   static associations = {
     visit: {type: 'belongs_to', key: 'visit_id'},
   };

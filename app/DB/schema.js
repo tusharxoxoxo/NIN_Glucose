@@ -1,7 +1,7 @@
 import {appSchema, tableSchema} from '@nozbe/watermelondb';
 
 const schema = appSchema({
-  version: 6,
+  version: 9,
   tables: [
     tableSchema({
       name: 'patients',
@@ -49,19 +49,43 @@ const schema = appSchema({
       ],
     }),
     tableSchema({
-      name: 'batches',
+      name: 'BIA',
       columns: [
         {name: 'visit_id', type: 'string', isIndexed: true},
-        {name: 'sensorType', type: 'string'},
+        {name: 'time', type: 'string'},
+        {name: 'config', type: 'string', isIndexed: true},
+        {name: 'freq', type: 'number', isIndexed: true},
+        {name: 'data', type: 'string'},
       ],
     }),
     tableSchema({
-      name: 'BIA',
+      name: 'TEM',
       columns: [
-        {name: 'batch_id', type: 'string', isIndexed: true},
-        {name: 'phaseAngle', type: 'number'},
-        {name: 'bioimpedance', type: 'number'},
-        {name: 'timestamp', type: 'number'},
+        {name: 'visit_id', type: 'string', isIndexed: true},
+        {name: 'time', type: 'string'},
+        {name: 'config', type: 'string'},
+        {name: 'freq', type: 'number'},
+        {name: 'data', type: 'number'},
+      ],
+    }),
+    tableSchema({
+      name: 'GSR',
+      columns: [
+        {name: 'visit_id', type: 'string', isIndexed: true},
+        {name: 'time', type: 'string'},
+        {name: 'config', type: 'string'},
+        {name: 'freq', type: 'number'},
+        {name: 'data', type: 'number'},
+      ],
+    }),
+    tableSchema({
+      name: 'GLU',
+      columns: [
+        {name: 'visit_id', type: 'string', isIndexed: true},
+        {name: 'time', type: 'string'},
+        {name: 'config', type: 'string'},
+        {name: 'freq', type: 'number'},
+        {name: 'data', type: 'number'},
       ],
     }),
   ],

@@ -5,13 +5,13 @@ import BottomSheet from '@gorhom/bottom-sheet';
 import ClinicalDetails from './clinicalDetails';
 import MyForm from './clinicForm';
 import {useMemo} from 'react';
+import {Theme} from '../theme/theme';
 
 // Get the screen height dynamically
 const {height: screenHeight} = Dimensions.get('window');
 
 const VisitBottomSheet = ({
   sheetRef,
-  snapPoints,
   sheetType,
   selectedVisit,
   onFormSubmit,
@@ -22,12 +22,10 @@ const VisitBottomSheet = ({
     [screenHeight],
   );
 
-  const handleFormSubmit = ({selectedVisit, formValues}) => {
-    console.log('Form submitted handle submit:', formValues);
-    console.log('Selected Visit: handle submit', selectedVisit);
+  const handleFormSubmit = async ({selectedVisit, formValues}) => {
     if (selectedVisit) {
       selectedVisit.addClinical(formValues);
-      selectedVisit.ClinicalDataCollected();
+      const collected = await selectedVisit.ClinicalDataCollected();
       sheetRef.current?.close(); // Close the BottomSheet
     }
   };
@@ -81,7 +79,7 @@ const VisitBottomSheet = ({
 const styles = StyleSheet.create({
   bottomSheetContent: {
     padding: 16,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: Theme.colors.surface,
     flex: 1, // Make the content container take the full available height
     borderTopStartRadius: 16,
     borderTopEndRadius: 16,

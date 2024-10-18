@@ -5,9 +5,9 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import {database} from '../DB/database';
 import withObservables from '@nozbe/with-observables';
 import {ScrollView} from 'react-native-gesture-handler';
+import {Q} from '@nozbe/watermelondb';
 
 const ClinicalDetails = ({clinical}) => {
-  console.log('clinical:', clinical);
   const theme = useTheme();
 
   const data = {
@@ -128,7 +128,9 @@ const styles = StyleSheet.create({
 });
 
 const enhance = withObservables(['visitID'], ({visitID}) => ({
-  clinics: database.collections.get('clinics').findAndObserve(visitID),
+  clinics: database.collections
+    .get('clinics')
+    .query(Q.where('visit_id', visitID)),
 }));
 
-export default ClinicalDetails;
+export default enhance(ClinicalDetails);

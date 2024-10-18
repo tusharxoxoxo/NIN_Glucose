@@ -1,8 +1,11 @@
 import React from 'react';
 import {Alert, StyleSheet, View, Text} from 'react-native';
-import {Avatar, Button} from 'react-native-paper';
+import {Avatar, Button, TextInput} from 'react-native-paper';
+import {useState} from 'react';
+import {saveString, loadString} from '../utils/storage';
 
 const NurseProfile = ({name, hospital, imageUrl}) => {
+  const [IP, setIP] = useState(loadString('IP'));
   const handleLogout = () => {
     Alert.alert('Logout', 'Are you sure you want to logout?', [
       {
@@ -12,11 +15,17 @@ const NurseProfile = ({name, hospital, imageUrl}) => {
       {
         text: 'OK',
         onPress: () => {
-          // Handle logout logic here
-          console.log('Logged out');
+          saveString('token', '');
+          Alert.alert('Logout', 'You have been logged out successfully');
         },
       },
     ]);
+  };
+
+  const handleSetIP = () => {
+    saveString('IP', IP);
+    Alert.alert('IP Address Set', 'IP Address has been set successfully');
+    setIP('');
   };
 
   return (
@@ -31,11 +40,19 @@ const NurseProfile = ({name, hospital, imageUrl}) => {
         <Text style={styles.name}>{name}</Text>
         <Text style={styles.hospital}>Hospital: {hospital}</Text>
       </View>
-
-      {/* Logout Button */}
+      <TextInput
+        mode="outlined"
+        label="IP Address"
+        value={IP}
+        onChangeText={text => setIP(text)}
+        style={{width: '100%', marginBottom: 16}}
+      />
       <View style={styles.buttonContainer}>
         <Button mode="outlined" onPress={handleLogout}>
           Logout
+        </Button>
+        <Button mode="outlined" onPress={handleSetIP} style={[{marginLeft: 8}]}>
+          SetIP
         </Button>
       </View>
     </View>
@@ -67,6 +84,7 @@ const styles = StyleSheet.create({
     color: '#666',
   },
   buttonContainer: {
+    flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
   },

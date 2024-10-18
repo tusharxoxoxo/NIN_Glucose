@@ -3,7 +3,7 @@ import { createSlice} from '@reduxjs/toolkit';
 interface SensorData {
     BIA: number;
     PHA: number;
-    time?: string;
+    time?: bigint | string;
 }
 
 interface GraphState {
@@ -15,12 +15,18 @@ const initialState: GraphState = {
 };
 
 function addTimeToData(data: SensorData[]): SensorData[] {
-    let time = new Date().toLocaleTimeString();
-    for (let i = 0; i < data.length; i++) {
-      data[i]['time'] = time;
-    }
-    return data;
-  }
+    return data.map((d) => {
+        const timestamp = Number(d.time) * 1000; // Convert bigint to number and to milliseconds
+        const date = new Date(timestamp);
+        const hours = date.getHours().toString().padStart(2, '0');
+        const minutes = date.getMinutes().toString().padStart(2, '0');
+        const seconds = date.getSeconds().toString().padStart(2, '0');
+        return {
+            ...d,
+            time: `${hours}:${minutes}:${seconds}` // Format the time as HH:MM:SS
+        };
+    });
+}
 
 export const graphSlice = createSlice({
     name: 'graph',

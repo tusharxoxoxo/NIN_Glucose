@@ -1,18 +1,16 @@
-import React, {useState, useRef, useMemo} from 'react';
+import react from 'react';
+import {useState, useMemo, useRef} from 'react';
+import VisitCard from './visitCard';
+import VisitBottomSheet from './visitBottomSheet';
 import {View, FlatList, TouchableOpacity, StyleSheet} from 'react-native';
-import {Headline, Divider, Provider as PaperProvider} from 'react-native-paper';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {Headline} from 'react-native-paper';
 import {useTheme} from 'react-native-paper';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {database} from '../DB/database';
 import withObservables from '@nozbe/with-observables';
 import {Q} from '@nozbe/watermelondb';
-import {database} from '../DB/database';
-import VisitCard from '../components/visitCard';
-import VisitBottomSheet from '../components/visitBottomSheet';
-import PatientDetailsCard from '../components/patientDetailsCard';
-import {Theme} from '../theme/theme'; // Import your custom theme
 
-// Merged PatientDetailsScreen with VisitList
-const PatientDetailsScreen = ({patient, visits}) => {
+const VisitList = ({visits, patient}) => {
   const theme = useTheme();
 
   // Bottom sheet setup
@@ -25,31 +23,27 @@ const PatientDetailsScreen = ({patient, visits}) => {
   // Function to open the bottom sheet
   const openBottomSheet = (visit, type) => {
     setSelectedVisit(visit);
-    setSheetType(type);
+    setSheetType(type); // Set the sheetType correctly
     sheetRef.current.snapToIndex(1); // open to 80%
   };
 
   // Function to handle the form submission
   const handleSubmit = () => {
     sheetRef.current.close();
+    setClinicalInfo('');
+    setDataCollectionInfo('');
   };
 
   const handlePressAddVisit = async () => {
     try {
-      const visit = await patient.addvisit(); // Assuming `addvisit` is defined in the patient model
+      const visit = await patient.addvisit();
     } catch (error) {
       console.error(error);
     }
   };
-
   return (
-    <PaperProvider theme={Theme}>
+    <>
       <View style={styles.container}>
-        {/* Patient Details */}
-        <PatientDetailsCard patient={patient._raw} />
-        <Divider style={styles.divider} bold={true} />
-
-        {/* Visit List */}
         <View style={styles.visitsHeader}>
           <View style={styles.headerLeft}>
             <Icon name="calendar" size={28} color={theme.colors.primary} />
@@ -68,8 +62,6 @@ const PatientDetailsScreen = ({patient, visits}) => {
             <VisitCard item={item} openBottomSheet={openBottomSheet} />
           )}
         />
-
-        {/* Bottom Sheet for visit details */}
         <VisitBottomSheet
           sheetRef={sheetRef}
           snapPoints={snapPoints}
@@ -78,18 +70,22 @@ const PatientDetailsScreen = ({patient, visits}) => {
           handleSubmit={handleSubmit}
         />
       </View>
-    </PaperProvider>
+    </>
   );
 };
+
+const enhance = withObservables(['patientID'], ({patientID}) => ({
+  patient: database.collections.get('patients').findAndObserve(patientID),
+  visits: database.collections
+    .get('visits')
+    .query(Q.where('patient_id', patientID)),
+}));
+
+export default enhance(VisitList);
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 8,
-    backgroundColor: '#F5F5F5',
-  },
-  divider: {
-    marginVertical: 8,
   },
   visitsHeader: {
     flexDirection: 'row',
@@ -110,14 +106,3 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
 });
-
-const enhance = withObservables(['route'], ({route}) => ({
-  patient: database.collections
-    .get('patients')
-    .findAndObserve(route.params.patientID),
-  visits: database.collections
-    .get('visits')
-    .query(Q.where('patient_id', route.params.patientID)),
-}));
-
-export default enhance(PatientDetailsScreen);

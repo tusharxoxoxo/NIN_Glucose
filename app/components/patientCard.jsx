@@ -9,7 +9,6 @@ const PatientCard = ({patient, onPress}) => {
   const navigation = useNavigation();
 
   const handlePress = () => {
-    console.log('patientID', patient.id);
     navigation.navigate('patientDetail', {patientID: patient.id});
   };
   return (
